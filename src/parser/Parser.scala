@@ -28,7 +28,7 @@ object Parser {
     }
   }
 
-  def readDefinitionCall(tokens: List[Token], node: Ast.Assign): (List[Token], Ast.Node) = {
+  private def readDefinitionCall(tokens: List[Token], node: Ast.Assign): (List[Token], Ast.Node) = {
     tokens.head match {
       case Token.RightParen() =>
         (tokens.tail, Ast.Assign(node.name, node.atom, node.params.reverse))

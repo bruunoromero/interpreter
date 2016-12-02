@@ -20,7 +20,7 @@ object Tokenizer {
     }
   }
 
-  def readString(chars: List[Char], acc: String): (Token.Token, List[Char]) = {
+  private def readString(chars: List[Char], acc: String): (Token.Token, List[Char]) = {
     if(chars.isEmpty) throw new Exception(s"Could not parse $acc")
     else if(chars.head == '"' && acc.last != '\\')
       (Token.StringLiteral(acc), chars.tail)
@@ -28,7 +28,7 @@ object Tokenizer {
       readString(chars.tail, acc + chars.head.toString)
   }
 
-  def readNumber(chars: List[Char], acc: String): (Token.Token, List[Char]) = {
+  private def readNumber(chars: List[Char], acc: String): (Token.Token, List[Char]) = {
     if(chars.head.isLetter || chars.head == '"') throw new Exception(s"Could not parse $acc")
     else if(chars.head.isDigit || (chars.head == '.' && !acc.contains('.')))
       readNumber(chars.tail, acc + chars.head.toString)
@@ -36,19 +36,19 @@ object Tokenizer {
       (Token.Number(acc), chars)
   }
 
-  def readIdentifier(chars: List[Char], acc: String): (Token.Token, List[Char]) = chars.head match {
+  private def readIdentifier(chars: List[Char], acc: String): (Token.Token, List[Char]) = chars.head match {
     case '(' | ')' | '[' | ']' | '{' | '}' | '\u0020' | '\u0009' | '\u000D' | '\u000A' =>
       (Token.Identifier(acc), chars)
     case c =>
       readIdentifier(chars.tail, acc + c.toString)
   }
 
-  def readComment(chars: List[Char]): (Token.Token, List[Char])  = chars.head match {
+  private def readComment(chars: List[Char]): (Token.Token, List[Char])  = chars.head match {
     case '\n' => (Token.Nothing(), chars.tail)
     case _ => readComment(chars.tail)
   }
 
-  private def nextToken(chars: List[Char]): (Token.Token, List[Char]) = {
+  private private def nextToken(chars: List[Char]): (Token.Token, List[Char]) = {
     if(chars.isEmpty) (Token.Nothing(), List[Char]())
     else
       chars.head match {

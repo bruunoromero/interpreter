@@ -24,7 +24,7 @@ object Core {
     if(params.length != 2) throw new Exception(s"Wrong number of arguments to function def, expecting 2 arguments but got ${params.length}")
     params.head match {
       case Atom(name) => scope.set(name, params(1))
-      case _ => throw new Exception(s"Expecting an atom a identifier as first argument, but got ${params.head.getClass}")
+      case _ => throw new Exception(s"Expecting an Atom as first argument, but got ${params.head.getClass}")
     }
     params(1)
   }

@@ -1,40 +1,43 @@
 package core
 
-import interpreter.Scope
-import parser.Ast.Atom
+import interpreter.Environment
+import interpreter.Environment.Value
+import parser.Ast._
 
 import scala.collection.mutable.Map
 /**
   * Created by bruno on 30/11/16.
   */
 object Core {
-  private def oper(nums: List[Any])(fn: (Double, Double) => Double): Any = nums.reduce { (a: Any, b: Any) =>
-    if(a.isInstanceOf[Double] && b.isInstanceOf[Double])
-      fn(a.asInstanceOf[Double], b.asInstanceOf[Double])
-    else
-      throw new Exception(s"Expecting type Number, but got type ${a.getClass} and ${b.getClass}")
-  }
-
-  private def print = { (scope: Scope, params: List[Any]) => params.foreach(println) }
-  private def add = { (scope: Scope, params: List[Any]) => oper(params) { (a: Double, b: Double) => a + b } }
-  private def subs = { (scope: Scope, params: List[Any]) => oper(params) { (a: Double, b: Double) => a - b } }
-  private def div = { (scope: Scope, params: List[Any]) => oper(params) { (a: Double, b: Double) => a / b } }
-  private def mult = { (scope: Scope, params: List[Any]) => oper(params) { (a: Double, b: Double) => a * b } }
-  private def define = { (scope: Scope, params: List[Any]) =>
-    if(params.length != 2) throw new Exception(s"Wrong number of arguments to function def, expecting 2 arguments but got ${params.length}")
-    params.head match {
-      case Atom(name) => scope.set(name, params(1))
-      case _ => throw new Exception(s"Expecting an Atom as first argument, but got ${params.head.getClass}")
+  case class NativeFunction(arity: Any, func: (Environment, List[Any]) => Any) {
+    def eval(params: List[Any], env: Environment) = {
+      func(env, params)
     }
-    params(1)
   }
 
-  val builtins = Map(
-    "println" -> print,
-    "+" -> add,
-    "-" -> subs,
-    "/" -> div,
-    "*" -> mult,
-    "def" -> define
+  private val `do` = NativeFunction("n", (env: Environment, params: List[Any]) => {
+    val res = params.map { el =>
+      if(el == "nil" || el.isInstanceOf[Nil])
+        null
+      else if(el.isInstanceOf[Node])
+        el.asInstanceOf[Node].eval(env)
+      else
+        throw new Exception(s"Unexpected identifier of type ${el.getClass}")
+    }
+
+    res.last
+  })
+
+  val builtins = Map[String, Value](
+    "println" -> IO.printLine,
+    "read-line" -> IO.readLine,
+    "do" -> `do`,
+    "+" -> Math.add,
+    "-" -> Math.subs,
+    "/" -> Math.div,
+    "*" -> Math.mult,
+    "=" -> Math.eq,
+    "<>" -> StringLiteral.concat,
+    "str" -> ListLiteral.stringfy
   )
 }

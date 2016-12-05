@@ -11,6 +11,8 @@ object Token {
 
   case class Number(content: String) extends Token
 
+  case class Bool(content: String) extends Token
+
   case class Identifier(content: String) extends Token
 
   case class LeftParen() extends Token

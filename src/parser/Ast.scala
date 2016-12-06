@@ -26,7 +26,9 @@ object Ast {
     override def eval(env: Environment) = body.map(el => el.eval(env))
   }
 
-  case class Number(value: Double) extends Value(value) with Node
+  case class DoubleValue(value: Double) extends Value(value) with Node
+
+  case class IntegerValue(value: Long) extends Value(value) with Node
 
   case class Bool(value: Boolean) extends Value(value) with Node
 
@@ -62,7 +64,8 @@ object Ast {
   case class Assign(name: String, value: Ast.Node) extends Node {
     override def eval(env: Environment): Unit = {
       value match {
-        case Number(content) => env.set(name, content)
+        case DoubleValue(content) => env.set(name, content)
+        case IntegerValue(content) => env.set(name, content)
         case StringLiteral(content) => env.set(name, content)
         case Bool(content) => env.set(name, content)
         case ListLiteral(content) => env.set(name, content)

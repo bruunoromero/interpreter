@@ -37,8 +37,10 @@ object Tokenizer {
     if(chars.head.isLetter || chars.head == '"') throw new Exception(s"Could not parse $acc")
     else if(chars.head.isDigit || (chars.head == '.' && !acc.contains('.')))
       readNumber(chars.tail, acc + chars.head.toString)
+    else if(acc.contains('.'))
+      (Token.Double(acc), chars)
     else
-      (Token.Number(acc), chars)
+      (Token.Integer(acc), chars)
   }
 
   @tailrec

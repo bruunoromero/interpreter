@@ -91,7 +91,8 @@ object Parser {
   private def readToken(tokens: List[Token.Token]): (List[Token.Token], Node) = {
     if(tokens.isEmpty) throw new Exception("Something is wrong with your code")
     tokens.head match {
-      case Token.Number(value) => (tokens.tail, Number(value.toDouble))
+      case Token.Integer(value) => (tokens.tail, IntegerValue(value.toLong))
+      case Token.Double(value) => (tokens.tail, DoubleValue(value.toDouble))
       case Token.Bool(value) => (tokens.tail, Bool(value.toBoolean))
       case Token.StringLiteral(value) => (tokens.tail, StringLiteral(value))
       case Token.LeftParen() => readCallType(tokens.tail)

@@ -9,7 +9,9 @@ object Token {
 
   case class StringLiteral(content: String) extends Token
 
-  case class Number(content: String) extends Token
+  case class Integer(content: String) extends Token
+
+  case class Double(content: String) extends Token
 
   case class Bool(content: String) extends Token
 

@@ -31,10 +31,10 @@ object Core {
     "read-line" -> IO.readLine,
     "do" -> `do`,
     "+" -> Math.add,
-    "-" -> Math.subs,
-    "/" -> Math.div,
-    "*" -> Math.mult,
-    "=" -> Math.eq,
-    "<>" -> StringLiteral.concat
+//    "-" -> Math.subs,
+//    "/" -> Math.div,
+//    "*" -> Math.mult,
+    "=" -> Math.eq
+//    "<>" -> StringLiteral.concat
   )
 }

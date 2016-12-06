@@ -18,8 +18,8 @@ object Ast {
     override def eval(env: Environment) = value
   }
 
-  case class Nil() extends Value(null) with Node {
-    override def eval(env: Environment): Any = "nil"
+  case class Null() extends Value(null) with Node {
+    override def eval(env: Environment): Any = null
   }
 
   case class Program(body: List[Ast.Node]) extends Node {
@@ -44,11 +44,7 @@ object Ast {
           if(arity.isInstanceOf[String] && arity.asInstanceOf[String] == "n" ||
             (arity.isInstanceOf[Int] && arity.asInstanceOf[Int] == params.length)) {
             val values = this.params.map(el => el.eval(env))
-            val res = thing.asInstanceOf[NativeFunction].eval(values, env)
-            if(res.isInstanceOf[BoxedUnit] || res == null)
-              Nil()
-            else
-              res
+            thing.asInstanceOf[NativeFunction].eval(values, env)
           }
           else
             throw new Exception(s"Unexpected number of arguments for function $name")

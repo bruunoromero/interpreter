@@ -17,12 +17,10 @@ object Core {
 
   private val `do` = NativeFunction("n", (env: Environment, params: List[Any]) => {
     val res = params.map { el =>
-      if(el == "nil" || el.isInstanceOf[Nil])
-        null
-      else if(el.isInstanceOf[Node])
+      if(el.isInstanceOf[Node])
         el.asInstanceOf[Node].eval(env)
       else
-        throw new Exception(s"Unexpected identifier of type ${el.getClass}")
+        el
     }
 
     res.last
@@ -37,7 +35,6 @@ object Core {
     "/" -> Math.div,
     "*" -> Math.mult,
     "=" -> Math.eq,
-    "<>" -> StringLiteral.concat,
-    "str" -> ListLiteral.stringfy
+    "<>" -> StringLiteral.concat
   )
 }

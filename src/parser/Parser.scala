@@ -98,7 +98,7 @@ object Parser {
       case Token.LeftBrace() => readList(tokens.tail, ListLiteral(List[Node]()))
       case Token.Identifier(name) =>
         name match {
-          case "nil" => (tokens.tail, Nil())
+          case "null" => (tokens.tail, Null())
           case _ => (tokens.tail, Atom(name))
         }
       case Token.RightBrace() => throw new Exception("Unexpected token ']'")
